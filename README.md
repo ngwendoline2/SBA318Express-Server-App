@@ -8,3 +8,8 @@ To create a new vehicle: POST http://localhost:3000/vehicles with a JSON body li
 To list all bookings: GET http://localhost:3000/bookings
 To create a new booking: POST http://localhost:3000/bookings with a JSON body like { "userId": 1, "vehicleId": 1 }
 We need to define our data models more precisely,in this structure, both users and vehicles have a bookings array that can hold the IDs of bookings related to them. This change will make it easier to query related bookings for each user and vehicle.
+Extract User ID: The user ID is pulled from the URL parameter.
+Find User: It searches for the user in the users array by ID.
+User Not Found: If the user doesn't exist, a 404 status code with an error message is returned.
+Delete User: The user is removed from the users array using splice().
+Confirm Deletion: The server sends back the deleted user's data as a confirmation of the action.
