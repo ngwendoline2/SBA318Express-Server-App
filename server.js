@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 3000;
+app.use(express.static('Public'));
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,8 +18,8 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log(`Server is running on http://localhost:${3000}`);
 });
 
 //------------Creating RESTful API Endpoints-------------//
@@ -76,11 +77,6 @@ app.get('/protected', authenticationMiddleware, (req, res) => {
 // A public route
 app.get('/', (req, res) => {
     res.send('Welcome to the Transportation Agency API!');
-});
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
  // Error-handling middleware
@@ -157,11 +153,6 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(404).send('Sorry, can’t find that!');
 });
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-}); 
 
 //------------Utilize Reasonable data structure---------//
 //Define data models
@@ -267,8 +258,8 @@ let (users) = [{ id: 1, name: 'John Doe', email: 'john@example.com' }];
 let (vehicles) = [{ id: 1, model: 'Tesla Model S', year: 2020 }];
 let (bookings) = [{ id: 1, userId: 1, vehicleId: 1, date: '2024-03-25' }];
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
 
 //add post routes for creation of new user
@@ -390,5 +381,35 @@ app.patch('/vehicles/:id', (req, res) => {
   res.json(vehicle);
 });
 
+//-------------Rendering Views with EJS--------------//
 
-  //-------------Rendering Views with EJS--------------//
+// Here's my project structure overview
+
+//   transportation-agency/
+// │
+// ├── node_modules/              # Node.js modules
+// ├── public/                    # Static files (CSS, JS, images)
+// │   └── css/
+// │       └── style.css
+// ├── src/
+// │   ├── controllers/           # Route controllers (controller layer)
+// │   │   ├── usersController.js
+// │   │   └── vehiclesController.js
+// │   ├── middleware/            # Custom middleware
+// │   │   ├── errorHandler.js
+// │   │   └── logger.js
+// │   ├── models/                # Data models (schema definitions)
+// │   │   ├── user.js
+// │   │   └── vehicle.js
+// │   ├── routes/                # Route definitions
+// │   │   ├── posts.js
+// │   │   ├── users.js
+// │   │   └── vehicles.js
+// │   ├── views/                 # Templates / views
+// │   │   ├── index.ejs
+// │   │   ├── users.ejs
+// │   │   └── vehicles.ejs
+// │   └── app.js                 # App entry point
+// ├── .env                       # Environment variables
+// ├── package.json
+// └── package-lock.json
