@@ -99,5 +99,35 @@ router
     if (post) res.json(post);
     else next();
   });
+  // Routes
+app.get('/users', (req, res) => {
+  res.json(users);
+});
+
+app.post('/users', (req, res) => {
+  const user = { id: users.length + 1, ...req.body };
+  users.push(user);
+  res.status(201).send(user);
+});
+
+app.get('/vehicles', (req, res) => {
+  res.json(vehicles);
+});
+
+app.post('/vehicles', (req, res) => {
+  const vehicle = { id: vehicles.length + 1, ...req.body };
+  vehicles.push(vehicle);
+  res.status(201).send(vehicle);
+});
+
+app.get('/bookings', (req, res) => {
+  res.json(bookings);
+});
+
+app.post('/bookings', (req, res) => {
+  const booking = { id: bookings.length + 1, ...req.body };
+  bookings.push(booking);
+  res.status(201).send(booking);
+});
 
 module.exports = router;

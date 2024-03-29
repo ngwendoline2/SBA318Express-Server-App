@@ -13,34 +13,6 @@ Find User: It searches for the user in the users array by ID.
 User Not Found: If the user doesn't exist, a 404 status code with an error message is returned.
 Delete User: The user is removed from the users array using splice().
 Confirm Deletion: The server sends back the deleted user's data as a confirmation of the action.
-
-Here's my project structure overview
-
-transportation-agency/
-│
-├── node_modules/              # Node.js modules
-├── public/                    # Static files (CSS, JS, images)
-│   └── css/
-│       └── style.css
-├── src/
-│   ├── controllers/           # Route controllers (controller layer)
-│   │   ├── usersController.js
-│   │   └── vehiclesController.js
-│   ├── middleware/            # Custom middleware
-│   │   ├── errorHandler.js
-│   │   └── logger.js
-│   ├── models/                # Data models (schema definitions)
-│   │   ├── user.js
-│   │   └── vehicle.js
-│   ├── routes/                # Route definitions
-│   │   ├── index.js
-│   │   ├── users.js
-│   │   └── vehicles.js
-│   ├── views/                 # Templates / views
-│   │   ├── index.ejs
-│   │   ├── users.ejs
-│   │   └── vehicles.ejs
-│   └── app.js                 # App entry point
-├── .env                       # Environment variables
-├── package.json
-└── package-lock.json
+Asynchronous Code: Handle asynchronous operations properly. Use async/await for cleaner async code.
+ We used Environment Variables: Use environment variables for configuration to avoid hard-coded values.
+Code Comments: Comment your code where necessary to describe why you're doing something, not what you're doing.

@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 app.use(express.static('Public'));
 
 // Middleware
@@ -13,13 +13,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 // Routes
-app.get('/', (req, res) => {
-  res.render('index');
+app.get("/", (req, res) => {
+  res.render('Hello there');
 });
 
 // Start the server
-app.listen(3000, () => {
-  console.log(`Server is running on http://localhost:${3000}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
 });
 
 //------------Creating RESTful API Endpoints-------------//
@@ -33,45 +33,6 @@ app.post('/api/routes', (req, res) => {
   const newRoute = req.body; // Add validation in real app
   routes.push(newRoute);
   res.status(201).send(newRoute);
-});
-
-//-------------Create and Using Middleware---------------//
-function logger(req, res, next) {
-    console.log(`${req.method} ${req.url}`);
-    next();
-  }
-  
-  // Use the middleware
-  app.use(logger);
-
-//--------------Implement the Server and Middleware--------------//
-// Body-parser middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Custom logger middleware
-const loggerMiddleware = (req, res, next) => {
-    console.log(`[${new Date().toISOString()}]: ${req.method} ${req.path}`);
-    next();
-};
-
-// Custom authentication middleware
-const authenticationMiddleware = (req, res, next) => {
-    // Simulating authentication by checking for a custom header 'X-Auth-Token'
-    const authToken = req.headers['x-auth-token'];
-    if (authToken === 'secret-token') {
-        next();
-    } else {
-        res.status(403).send('Unauthorized');
-    }
-};
-
-// Applying the logger middleware globally
-app.use(loggerMiddleware);
-
-// Example protected route using the authentication middleware
-app.get('/protected', authenticationMiddleware, (req, res) => {
-    res.send('You have accessed a protected route!');
 });
 
 // A public route
@@ -112,54 +73,12 @@ let users = [{ id: 1, name: 'John Doe' }];
 let vehicles = [{ id: 1, model: 'Tesla Model S' }];
 let bookings = [{ id: 1, userId: 1, vehicleId: 1 }];
 
-// Routes
-app.get('/users', (req, res) => {
-    res.json(users);
-});
-
-app.post('/users', (req, res) => {
-    const user = { id: users.length + 1, ...req.body };
-    users.push(user);
-    res.status(201).send(user);
-});
-
-app.get('/vehicles', (req, res) => {
-    res.json(vehicles);
-});
-
-app.post('/vehicles', (req, res) => {
-    const vehicle = { id: vehicles.length + 1, ...req.body };
-    vehicles.push(vehicle);
-    res.status(201).send(vehicle);
-});
-
-app.get('/bookings', (req, res) => {
-    res.json(bookings);
-});
-
-app.post('/bookings', (req, res) => {
-    const booking = { id: bookings.length + 1, ...req.body };
-    bookings.push(booking);
-    res.status(201).send(booking);
-});
-
-// Error-handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).send('Sorry, can’t find that!');
-});
-
 //------------Utilize Reasonable data structure---------//
 //Define data models
-let (users) = [{ id: 1, name: 'John Doe', bookings: [] }];
-let (vehicles) = [{ id: 1, model: 'Tesla Model S', bookings: [] }];
-let (bookings) = [{ id: 1, userId: 1, vehicleId: 1, status: 'confirmed' }];
-used in users.js
+// let (users)= [{ id: 1, name: 'John Doe', bookings: [] }];
+// let (vehicles) = [{ id: 1, model: 'Tesla Model S', bookings: [] }];
+// let (bookings) = [{ id: 1, userId: 1, vehicleId: 1, status: 'confirmed' }];
+// used in users.js
 
 // Create a new user
 app.post('/users', (req, res) => {
@@ -180,69 +99,11 @@ app.post('/vehicles', (req, res) => {
     res.status(201).json(newVehicle);
 });
 
-// List all vehicles
-app.get('/vehicles', (req, res) => {
-    res.json(vehicles);
-});
-
-// Create a new booking
-app.post('/bookings', (req, res) => {
-    const { userId, vehicleId } = req.body;
-    const newBooking = { id: bookings.length + 1, userId, vehicleId, status: 'confirmed' };
-
-    // Add the booking to the user and vehicle
-    const user = users.find(user => user.id === userId);
-    const vehicle = vehicles.find(vehicle => vehicle.id === vehicleId);
-
-    if (!user || !vehicle) {
-        return res.status(400).send('User or Vehicle not found.');
-    }
-
-    user.bookings.push(newBooking.id);
-    vehicle.bookings.push(newBooking.id);
-    bookings.push(newBooking);
-
-    res.status(201).json(newBooking);
-});
-
-// List all bookings
-app.get('/bookings', (req, res) => {
-    res.json(bookings.map(booking => {
-        const user = users.find(user => user.id === booking.userId)?.name;
-        const vehicle = vehicles.find(vehicle => vehicle.id === booking.vehicleId)?.model;
-        return { ...booking, userName: user, vehicleModel: vehicle };
-    }));
-});
-
 //--------------Creating a Get Routes for all datas that has to be exposed----------//
 // Define my datas for simplicity
 // let users = [{ id: 1, name: 'John Doe', email: 'john@example.com' }];
 // let vehicles = [{ id: 1, model: 'Tesla Model S', year: 2020 }];
 // let bookings = [{ id: 1, userId: 1, vehicleId: 1, date: '2024-03-25' }];
-
-//------------- Get all users---------------//
-app.get('/users', (req, res) => {
-    res.json(users);
-  });
-  
-  // Get a single user by ID
-  app.get('/users/:id', (req, res) => {
-    const user = users.find(u => u.id === parseInt(req.params.id));
-    if (!user) return res.status(404).send('User not found.');
-    res.json(user);
-  });
-  
-  // Get all vehicles
-  app.get('/vehicles', (req, res) => {
-    res.json(vehicles);
-  });
-  
-  // Get a single vehicle by ID
-  app.get('/vehicles/:id', (req, res) => {
-    const vehicle = vehicles.find(v => v.id === parseInt(req.params.id));
-    if (!vehicle) return res.status(404).send('Vehicle not found.');
-    res.json(vehicle);
-  });
   
   // Get all bookings
   app.get('/bookings', (req, res) => {
@@ -252,38 +113,10 @@ app.get('/users', (req, res) => {
     //-----------create POST routes for data---------//
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
-
-// Sample initial data
-let (users) = [{ id: 1, name: 'John Doe', email: 'john@example.com' }];
-let (vehicles) = [{ id: 1, model: 'Tesla Model S', year: 2020 }];
-let (bookings) = [{ id: 1, userId: 1, vehicleId: 1, date: '2024-03-25' }];
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
-
-//add post routes for creation of new user
-// Create a new user
-app.post('/users', (req, res) => {
-    const { name, email } = req.body;
-    
     // Simple validation
-    if (!name || !email) {
+    if ('!name || !email') {
       return res.status(400).send('Missing name or email.');
     }
-  
-    // Create a new user object
-    const newUser = {
-      id: users.length + 1, // Simple ID assignment logic for demonstration purposes
-      name,
-      email
-    };
-  
-    users.push(newUser); // Add the new user to the array
-    res.status(201).send(newUser); // Return the newly created user
-  });
-  
-
 //------------PATCH route to update user infos--------//
 
 app.patch('/users/:id', (req, res) => {
@@ -325,31 +158,6 @@ app.delete('/users/:id', (req, res) => {
     // Send back the deleted user data as confirmation
     res.status(200).json(deletedUser);
   });
-//------------setting up data--------------//
-let (vehicles) = [
-    { id: 1, type: 'bus', status: 'active' },
-    { id: 2, type: 'taxi', status: 'inactive' },
-    { id: 3, type: 'bus', status: 'inactive' },
-    // Add more vehicles as needed
-  ];
-
-  app.get('/vehicles', (req, res) => {
-    let { type, status } = req.query; // Extract query parameters
-    let filteredVehicles = vehicles; // Start with all vehicles
-  
-    // Filter by type if the type query parameter is provided
-    if (type) {
-      filteredVehicles = filteredVehicles.filter(vehicle => vehicle.type === type);
-    }
-  
-    // Filter by status if the status query parameter is provided
-    if (status) {
-      filteredVehicles = filteredVehicles.filter(vehicle => vehicle.status === status);
-    }
-  
-    // Return the filtered list of vehicles
-    res.json(filteredVehicles);
-  });
 
   //------------ routes params, where appropriate----------------//
 // GET a specific vehicle by ID
@@ -385,7 +193,7 @@ app.patch('/vehicles/:id', (req, res) => {
 
 // Here's my project structure overview
 
-//   transportation-agency/
+// transportation-agency/
 // │
 // ├── node_modules/              # Node.js modules
 // ├── public/                    # Static files (CSS, JS, images)
@@ -402,7 +210,7 @@ app.patch('/vehicles/:id', (req, res) => {
 // │   │   ├── user.js
 // │   │   └── vehicle.js
 // │   ├── routes/                # Route definitions
-// │   │   ├── posts.js
+// │   │   ├── index.js
 // │   │   ├── users.js
 // │   │   └── vehicles.js
 // │   ├── views/                 # Templates / views
@@ -412,4 +220,4 @@ app.patch('/vehicles/:id', (req, res) => {
 // │   └── app.js                 # App entry point
 // ├── .env                       # Environment variables
 // ├── package.json
-// └── package-lock.json
+// └── package-lock.jsoncontrollers

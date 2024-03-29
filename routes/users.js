@@ -97,4 +97,9 @@ router.get("/:id/posts", (req, res, next) => {
   // Respond with user's posts
   res.json({ userPosts });
 });
+//add post routes for creation of new user
+// Create a new user
+app.post('/users', (req, res) => {
+  const { name, email } = req.body;
+})
 module.exports = router;
