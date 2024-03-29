@@ -1,3 +1,5 @@
+export { models } from './users.js';
+
 app.get('/users', (req, res) => {
     res.json(users);
   });

@@ -1,3 +1,4 @@
+export { models } from './vehicle.js';
 // Get all vehicles
 app.get('/vehicles', (req, res) => {
     res.json(vehicles);
