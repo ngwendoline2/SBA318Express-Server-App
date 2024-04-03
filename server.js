@@ -1,16 +1,33 @@
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import bodyParser from "bodyparser";
+import {urls} from './helpers.js'
+import { isAsyncFunction } from "util/types";
 //---------------Create Express Server----------------//
 // console.log('script is running');
-const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 // using all caps for PORT because it is a constant
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.use(express.static("./styles"));
 
+vares-module-specifier-resolutionnode
 const userRoutes = require('./routes/user');
 app.use('/user', userRoutes);
 
 const fs = require('fs');
+
+
+async function validateCookies(req, res, next) {
+  await cookieValidator(req.cookies);
+  next();
+}
+
+async function cookieValidator(cookies) {
+  console.log(cookies);
+  // we don't have any cookies, so we will just return true
+  return true;
+}
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,11 +60,6 @@ app.get("/", (req, res) => {
 app.set("views", "./views");    // specify the views directory
 app.set("view engine", "ejs");   // register the template engine
 
-async function validateCookies(req, res, next) {
-  await cookieValidator(req.cookies);
-  next();
-}
-
 async function cookieValidator(cookies) {
   console.log(cookies);
   // we don't have any cookies, so we will just return true
@@ -57,10 +69,10 @@ async function cookieValidator(cookies) {
 app.use(cookieParser());
 app.use(validateCookies);
 
-const logReq = function (req, res, next) {
-  console.log('Request Received');
-  next();
-}
+// const (logReq)= function (req, res, next) {
+//   console.log('Request Received');
+//   next();
+// }
 
 app.use(logReq);
 // get, post, put (or patch), delete
@@ -69,16 +81,14 @@ app.get("/", (req, res) => {
   // res.send("Try navigating to /user.");
   const options = {
       title: "Rendering Views with Express",
-      content:
-    };
-
+      content: ""
+    }
     res.render("index", options);
-  })
-  
+  });
   app.get("/example", (req, res) => {
       const options = {
-          title: "Another example",
-          content: "<h2> This is another way to add content </h2> \
+          title: "Transport Agency",
+          content: "<h2> Welcome to a zone of confort with us </h2> \
           <form> \
           <input type='text'> \
           <input type='submit'> \
@@ -111,19 +121,19 @@ app.get("/search", (req, res) => {
     res.redirect('https://www.google.com');
 })
 
-// // routes need to be unique but that comes with both the http method and the path
-// app.get("/user", (req, res) => {
-//     res.send(`Received a GET request for user! Try navigating to /user/somevalue/profile/somevalue`);
-// })
+// routes need to be unique but that comes with both the http method and the path
+app.get("/user", (req, res) => {
+    res.send(`Received a GET request for user! Try navigating to /user/somevalue/profile/somevalue`);
+})
 
 
-// app.get("/user/list", (req, res) => {
-//     res.send('THIS SHOW LIST a page that lists all users')
-// })
+app.get("/user/list", (req, res) => {
+    res.send('THIS SHOW LIST a page that lists all users')
+})
 
-// app.get("/user/:userID", (req, res) => {
-//     res.send(`Navigated to the user page for: ${req.params.userID}`)
-// })
+app.get("/user/:userID", (req, res) => {
+    res.send(`Navigated to the user page for: ${req.params.userID}`)
+})
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
@@ -134,13 +144,13 @@ app.listen(PORT, () => {
 // transportation-agency/
 // │
 // ├── node_modules/              # Node.js modules
-// ├── public/                    # Static files (CSS, JS, images)
+// ├── static/                    # Static files (CSS, JS, images)
 // │   └── css/
 // │       └── style.css
 // ├── src/
 // │   ├── controllers/           # Route controllers (controller layer)
-// │   │   ├── usersController.js
-// │   │   └── vehiclesController.js
+// │   │   ├── user.js
+// │   │   └── vehicles.js
 // │   ├── middleware/            # Custom middleware
 // │   │   ├── errorHandler.js
 // │   │   └── logger.js
@@ -148,14 +158,13 @@ app.listen(PORT, () => {
 // │   │   ├── user.js
 // │   │   └── vehicle.js
 // │   ├── routes/                # Route definitions
-// │   │   ├── index.js
-// │   │   ├── users.js
-// │   │   └── vehicles.js
+// │   │   ├── user.js
+// │   │   └── vehicle.js
 // │   ├── views/                 # Templates / views
 // │   │   ├── index.ejs
-// │   │   ├── users.ejs
-// │   │   └── vehicles.ejs
+// │   │   ├── user.ejs
+// │   │   └── vehicle.ejs
 // │   └── app.js                 # App entry point
 // ├── .env                       # Environment variables
 // ├── package.json
-// └── package-lock.jsoncontrollers
+// └── package-lock.json

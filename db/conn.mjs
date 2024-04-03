@@ -1,4 +1,83 @@
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+bodyParser.config();
 
+const client = new MongoClient(process.env.MONGO_URI);
+
+let conn;
+try {
+    conn = await client.connect();
+    console.log('connected')
+} catch (e) {
+    console.error(e);
+}
+
+
+//------------Utilize Reasonable data structure---------//
+//Define data models
+// let users = [{ id: 1, name: 'John Doe', bookings: [] }];
+// let vehicles = [{ id: 1, model: 'Tesla Model S', bookings: [] }];
+// let bookings = [{ id: 1, userId: 1, vehicleId: 1, status: 'confirmed' }];
+// used in users.js
+// The "users" data will be simple information about
+// the application's user base.
+  
+// Sample initial data
+let users = [{ id: 1, name: 'John Doe', email: 'john@example.com' }];
+let vehicles = [{ id: 1, model: 'Tesla Model S', year: 2020 }];
+let bookings = [{ id: 1, userId: 1, vehicleId: 1, date: '2024-03-25' }];
+ //-----------create POST routes for data---------//
+ app.use(express.json()); // Middleware to parse JSON bodies
+ app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
+ 
+ //add post routes for creation of new user
+ // Create a new user
+ app.post('/users', (req, res) => {
+     const { name, email } = req.body;
+     
+     // Simple validation
+     if (!name || !email) {
+       return res.status(400).send('Missing name or email.');
+     }
+   
+     // Create a new user object
+     const newUser = {
+       id: users.length + 1, // Simple ID assignment logic for demonstration purposes
+       name,
+       email
+     };
+   
+     users.push(newUser); // Add the new user to the array
+     res.status(201).send(newUser); // Return the newly created user
+   });
+
+ //-----------create POST routes for data---------//
+ app.use(express.json()); // Middleware to parse JSON bodies
+ app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
+ 
+ //add post routes for creation of new user
+ // Create a new user
+ app.post('/users', (req, res) => {
+     const { name, email } = req.body;
+     
+     // Simple validation
+     if (!name || !email) {
+       return res.status(400).send('Missing name or email.');
+     }
+   
+     // Create a new user object
+     const newUser = {
+       id: users.length + 1, // Simple ID assignment logic for demonstration purposes
+       name,
+       email
+     };
+   
+     users.push(newUser); // Add the new user to the array
+     res.status(201).send(newUser); // Return the newly created user
+   });
+
+   
 // Create a new vehicle
 app.post('/vehicles', (req, res) => {
     const newVehicle = { id: vehicles.length + 1, model: req.body.model, bookings: [] };
@@ -6,7 +85,6 @@ app.post('/vehicles', (req, res) => {
     res.status(201).json(newVehicle);
 });
 
-  
   // Get all bookings
   app.get('/bookings', (req, res) => {
     res.json(bookings);
@@ -79,12 +157,7 @@ app.delete('/vehicles/:id', (req, res) => {
   const [deletedVehicle] = vehicles.splice(index, 1);
   res.json(deletedVehicle);
 });
+// we are accessing database in the mongoDB compass sample data
+let db = conn.db("Transportation Agency");
 
-//------------setting up data--------------//
-vehicles = [
-    { id: 1, type: 'bus', status: 'active' },
-    { id: 2, type: 'taxi', status: 'inactive' },
-    { id: 3, type: 'bus', status: 'inactive' },
-    // Add more vehicles as needed
-  ];
-module.exports = vehicles;
+export default db;

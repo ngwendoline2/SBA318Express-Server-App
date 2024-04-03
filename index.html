@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Transportation</title>
-    <title>Add New User</title>
     <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
@@ -17,10 +16,19 @@
         
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
+
         <h>Add New Route</h2>
+          <label for="name">Name:</label>
+        <input type="text"
+        input id="name"
+        input name="name" required>
+
         <h3>Add New User</h3>
-    
-        <button type="submit">Submit</button>
+        <label for="name">Name:</label>
+        <input type="text"
+        input id="name"
+        input name="name" required>
+        
     <form action="/api/routes" method="post">
         <input type="text" name="routeName" placeholder="Route Name" required>
         <input type="submit" value="Add Route">
@@ -39,42 +47,3 @@
       </form>
 </body>
 </html>
-
-
-
-const express = require('express');
-const bodyParser = require('body-parser');
-
-const app = express();
-const PORT = 3000;
-
-// Set the view engine to EJS
-app.set('view engine', 'ejs');
-
-// Middleware to parse request body
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Your routes and middleware
- // Create a new user object
- const newUser = {
-    id: users.length + 1, // Simple ID assignment logic for demonstration purposes
-    name,
-    email
-  };
-
-  users.push(newUser); // Add the new user to the array
-  res.status(201).send(newUser); // Return the newly created user;
-
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-
-
-app.get('/profile', (req, res) => {
-    const userProfile = {
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      travelHistory: [...]
-      // Other profile information
-    };
-  
-    res.render('profile', { user: userProfile });
-  });

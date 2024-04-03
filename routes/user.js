@@ -1,3 +1,7 @@
+import express from 'express';
+import db from '../db/conn.mjs';
+import { ObjectId } from "mongodb";
+
 const express = require('express');
 const router = express.Router();
 
@@ -32,4 +36,4 @@ router.get("/settings", (req, res) => {
     res.send("Get User Settings");
 })
 
-module.exports = router;
+export default router;

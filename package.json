@@ -1,19 +1,20 @@
 {
   "name": "sba318-express-server-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Creating a basic transportation agency server application with Node.js and Express involves several steps, including setting up the project, creating a RESTful API, implementing middleware, using a template engine, and handling form submissions.We add some endpoints to manage transportation data, like buses or routes. With the body-parser middleware set up, my Express app can now parse the body of incoming requests. The POST endpoint /api/routes defined earlier will handle form submissions. We used node server.js to start my server. \r Visit http://localhost:3000 in browser to view the form. We will create two custom middleware functions: Logger Middleware: To log details of each request.Authentication Middleware: To simulate a simple authentication mechanism, The  authentication middleware checks for a specific header (X-Auth-Token) and value (secret-token). If the token matches, it proceeds to the next middleware or route handler; otherwise, it returns a 403 Unauthorized response. We use the /protected route without the X-Auth-Token header to observe the Unauthorized response. Use a tool like Postman to set the X-Auth-Token header to secret-token and access the /protected route again. This time, we should gain access. middleware will catch any errors that are passed to the next() function within the application and respond with a 500 Internal Server Error status, indicating that something went wrong on the server. The error-handling middleware can be customized to handle different types of errors differently. For example, you can modify the middleware to return a JSON response with more error details or to handle specific error types in a certain way: We  updated server.js with the following content to include error-handling middleware and routes for Users, Vehicles, and Bookings\r The example includes a simple error-handling middleware that logs the error stack and sends a generic \"Something broke!\" message to the client. Additionally, there's a handler for 404 - Not Found errors for unmatched routes. We test our API endpoints using Postman or curl\r To list all users: GET http://localhost:3000/users\r To create a new user: POST http://localhost:3000/users with a JSON body like { \"name\": \"Jane Doe\" }\r To list all vehicles: GET http://localhost:3000/vehicles\r To create a new vehicle: POST http://localhost:3000/vehicles with a JSON body like { \"model\": \"Audi Q5\" }\r To list all bookings: GET http://localhost:3000/bookings\r To create a new booking: POST http://localhost:3000/bookings with a JSON body like { \"userId\": 1, \"vehicleId\": 1 }\r We need to define our data models more precisely,in this structure, both users and vehicles have a bookings array that can hold the IDs of bookings related to them. This change will make it easier to query related bookings for each user and vehicle.\r Extract User ID: The user ID is pulled from the URL parameter.\r Find User: It searches for the user in the users array by ID.\r User Not Found: If the user doesn't exist, a 404 status code with an error message is returned.\r Delete User: The user is removed from the users array using splice().\r Confirm Deletion: The server sends back the deleted user's data as a confirmation of the action.\r Asynchronous Code: Handle asynchronous operations properly. Use async/await for cleaner async code.\r  We used Environment Variables: Use environment variables for configuration to avoid hard-coded values.\r Code Comments: Comment your code where necessary to describe why you're doing something, not what you're doing.",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "body-parser": "^1.20.2",
     "ejs": "^3.1.9",
-    "express": "^4.19.2"
-    
+    "express": "^4.19.2",
+    "mongodb": "^6.5.0"
   }
 }
